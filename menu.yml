@@ -1,0 +1,15 @@
+Página principal   : {icon: "fa fa-home", url: "blank.php" }
+
+Assistente de Sizing : {icon: "fa fa-magic", url: "blank.php" }
+
+
+Sizing de produtos : {icon: "fa fa-gear" }
+     Firewall  : products/firewall.html
+     Endpoint  : blank.php
+     Wireless  : blank.php
+     RED       : blank.php
+     Email Appliance  : blank.php
+     Web Appliance  : blank.php
+
+
+RFP & TRs:  {icon: "fa fa-file-pdf-o", url: "blank.php" }

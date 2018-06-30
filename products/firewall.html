@@ -1,0 +1,250 @@
+<section>
+	<div class="section-body">
+		<div class="row">
+			<form class="form">
+				<div class="card">
+					<div class="card-head style-primary">
+						<header> Firewall XG Sizing </header>
+					</div>
+					<div class="card-body" style="margin-top: -3%;">
+						<div class="form-group">
+							<h3> Escolha a configuração desejada:</h3>
+							<div class="row">
+								<div class="col-md-4">
+									Quantos usuários: <input type="text" id="xg_qtd_users">
+									<br>
+									 <div class="form-group">
+										<label class="col-sm-5 control-label">Tempo do suporte</label>
+										<br>
+										<div class="col-sm-9">
+										   <label class="radio-inline radio-styled">
+													<input type="radio" name="coverage" value="12"><span>1</span>
+											</label>
+											<label class="radio-inline radio-styled">
+													<input type="radio" name="coverage" value="24"><span>2</span>
+											</label>
+											<label class="radio-inline radio-styled">
+													<input type="radio" name="coverage" value="36"><span>3</span>
+											</label
+											<br>
+											<label class="radio-inline radio-styled">
+													<input type="radio" name="coverage" value="option4" disabled><span>4</span>
+											</label>
+											<label class="radio-inline radio-styled">
+													<input type="radio" name="coverage" value="option5" disabled><span>5</span>
+											</label>
+										</div>
+									</div>
+
+								</div>
+								<div class="col-md-3" style="margin-left: -5%">
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Recursos Básicos</label>
+										<div class="col-sm-9">
+												<div class="checkbox checkbox-styled">
+													<label>
+														<input type="checkbox" value="eg_webfilter" class="enterpriseguard">
+														<span>Filtragem Web</span>
+													</label>
+												</div>
+												<div class="checkbox checkbox-styled">
+													<label>
+														<input type="checkbox" value="eg_appcontrol" class="enterpriseguard">
+														<span>Controle de Aplicações</span>
+													</label>
+												</div>
+										</div><!--end .col -->
+									</div>
+								</div>
+								<div class="col-md-6" style="margin-left: -5%">
+									<div class="form-group">
+										<label class="col-sm-12 control-label">Recursos Avançados</label>
+										<div class="col-sm-9">
+												<div class="checkbox checkbox-styled">
+													<label>
+														<input type="checkbox" value="fg_emailcontrol" class="fullguard">
+														<span>Controle de Antispam + DLP</span>
+													</label>
+												</div>
+												<div class="checkbox checkbox-styled">
+													<label>
+														<input type="checkbox" value="fg_waf" class="fullguard">
+														<span>Proteção de Servidores WEB (WAF)</span>
+													</label>
+												</div>
+												<div class="checkbox checkbox-styled">
+													<label>
+														<input type="checkbox" value="fg_sandstorm" id="fg_sandstorm" class="fullguard">
+														<span>Analise de malwares Zero-Day (Sandbox)</span>
+													</label>
+												</div>
+										</div><!--end .col -->
+									</div>
+								</div>
+							</div>							
+						</div>
+						<input type="hidden" id="license_type" value="eg">
+						<input type="hidden" id="sandstorm" value="false">
+						
+						<div class="form-group">
+							<input type="submit" class="btn btn-primary" id="btn_getResult" disabled>
+						</div>
+						<div class="form-group" id="div_tbl_results" style="display: none;" >
+							<h3 class="col-sm-3 control-label">Resultados:</h3>
+							<table class="display" cellspacing="0" width="100%" id="tbl_firewall">
+								<thead>
+								<tr>
+									<th> </th>
+									<th> Produto </th>
+									<th> SKU </th>
+									<th> Descrição </th>
+<!--									<th> Des</th>
+ 									<th> Throughput NGFW </th>
+									<th> SKU - Hardware </span></th>
+									<th> Licença </th>
+									<th> SKU </th> -->
+								</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+			</form>
+		</div>
+	</div>
+</section>
+
+<style>
+	.dz-message {
+		margin-left: 30%;
+	}
+</style>
+<script type="text/javascript">
+	$(function(){
+		var FirewallURLAjax = "products/firewall_api.php"
+		
+		var table_firewall = $("#tbl_firewall").DataTable({
+			data: [],
+			"dom": '<"top"i>rt<"bottom">B<"clear">',
+			"paging":   false,
+			"ordering": false,
+			"info":     false,
+			responsive: true,
+			columns: [
+//				{
+//					"width"    : "5%",
+//					"orderable":      false,
+//					"data":           null,
+//					"defaultContent": ''
+//				},
+				{ "data": 'details' },
+				{ "data": 'product' },
+				{ "data": 'sku' },
+				{ "data": 'description' }
+//				{ "data": 'users_fg' },
+//				{ "data": 'ngfw' },
+//				{ "data": 'sku' },
+//				{ "data": 'license' },
+//				{ "data": 'l_sku' },
+			],
+			"columnDefs": [
+				{"className": "dt-center", "targets": "_all"}
+			],
+			<!-- dom: 'Bfrtip', -->
+			buttons: [
+				'excelHtml5'
+			]
+		});
+		
+		$("#xg_qtd_users").on("keyup", function(){
+			$("#btn_getResult").removeAttr("disabled");
+		});
+	
+		$(".fullguard").on("change",function(){
+			var fullGuardOption = $('.fullguard:checkbox:checked').length > 0;
+			if (fullGuardOption === false ){
+				$("#license_type").val("eg");
+				$(".enterpriseguard").attr('checked','')
+			} else {
+				$("#license_type").val("fg");
+				$(".enterpriseguard").attr('checked','checked')
+			}
+		});
+		
+		$("#fg_sandstorm").on("change", function(){
+			if ( $(this).is(":checked") ){
+				$("#sandstorm").val("true");
+			} else {
+				$("#sandstorm").val("false");
+			}
+		});
+		
+		$("#btn_getResult").click(function(e){
+			e.preventDefault();
+			var coverage = $('input[name=coverage]:checked').val()
+			getFirewallData = "license_type=" + $("#license_type").val() + "&users=" + $("#xg_qtd_users").val() + "&sandstorm=" + $("#sandstorm").val() + 
+			"&coverage=" + coverage;
+			table_firewall.ajax.url( FirewallURLAjax + "?" + getFirewallData, true ).load();				
+		 	table_firewall.column( 0 ).data().each( function ( value, index ) {
+					console.log( 'Data in index: '+index+' is: '+value );
+			});
+			$("#div_tbl_results").show();
+			
+		});
+		
+		function format ( d ) {
+			// `d` is the original data object for the row
+			return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+				'<tr>'+
+					'<tr>'+
+						'<td><b><b>Memória RAM:</b></b></td>'+
+						'<td>'+d.hw_ram+'</td>'+
+						'<td><b>Max. tuneis VPN IPSec:</b></td>'+
+						'<td>'+d.ipsec_tunnels+'</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td><b>Espaço em Disco (HD):</b></td>'+
+						'<td>'+d.hw_storage+'</td>'+
+						'<td><b>VPN Throughtput:</b></td>'+
+						'<td>'+d.ipsec+'</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td><b>Max. REDs (Full):</b></td>'+
+						'<td>'+d.red_full+'</td>'+
+						'<td><b>Max. tuneis SSL VPN:</b></td>'+
+						'<td>'+d.ssl_tunnels+'</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td><b>Max. REDs (Split mode):</b></td>'+
+						'<td>'+d.red_fw+'</td>'+
+						'<td><b>Max. Sessões:</b></td>'+
+						'<td>'+d.total_sessions+'</td>'+
+					'</tr>'+
+					'<tr>'+
+						'<td><b>APs Gerenciáveis:</b></td>'+
+						'<td>'+ d.ap_managed + '</b></td>'+
+						'<td><b>Novas Sessões por segundo:</b></td>'+
+						'<td>'+ d.new_sessions + '</b></td>'+
+					'</tr>'+
+				'</tr>'+
+			'</table>';
+		}
+		
+		// Add event listener for opening and closing details
+		$('#tbl_firewall tbody').on('click', 'span.details-control', function () {
+			var tr = $(this).closest('tr');
+			var row = table_firewall.row( tr );
+	 
+			if ( row.child.isShown() ) {
+				// This row is already open - close it
+				row.child.hide();
+				tr.removeClass('shown');
+			}
+			else {
+				// Open this row
+				row.child( format(row.data()) ).show();
+				tr.addClass('shown');
+			}
+		} );
+		
+	});
+</script>

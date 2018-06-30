@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                <title>Sophos Sizing Tool</title>
+
+                <!-- BEGIN META -->
+                <meta charset="utf-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta name="keywords" content="your,keywords">
+                <meta name="description" content="Short explanation about this website">
+                <!-- END META -->
+
+                <!-- BEGIN STYLESHEETS -->
+                                <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet' type='text/css'/>
+                    <link href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">
+
+                <!-- END STYLESHEETS -->
+
+                <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+                <!--[if lt IE 9]>
+    <![endif]-->
+        </head>
+
+<section>
+	<div class="section-body">
+		<div class="row">
+			<form class="form">
+				<div class="card">
+					<div class="card-head style-primary">
+						<header> Firewall XG Sizing </header>
+					</div>
+					<div class="card-body" style="margin-top: -3%;">
+						<div class="form-group" id="div_tbl_results" >
+							<label class="col-sm-3 control-label">Results:</label>
+							<table class="display" cellspacing="0" width="100%" id="tbl_firewall">
+								<thead>
+								<tr>
+									<th> Modelo </th>
+									<th> Formato </th>
+									<th> Qtd Users</th>
+									<th> Throughput NGFW </th>
+									<th> SKU - Hardware </span></th>
+									<th> Licença </th>
+									<th> SKU </span></th>
+									<th> Tempo </span></th>
+									<th> Descrição </span></th>
+								</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+			</form>
+		</div>
+	</div>
+</section>
+
+<style>
+	.dz-message {
+			margin-left: 30%;
+	}
+</style>
+
+
+		        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+                       <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+
+<script type="text/javascript">
+	$(function(){
+
+/* $.ajax({
+        type: 'GET',
+        url: 'firewall_api.php',
+        mimeType: 'json',
+        success: function(data) {
+		console.dir(data);
+        },
+        error: function() {
+            alert('Fail!');
+        }
+    });
+*/
+
+		$("#tbl_firewall").DataTable({
+			"ajax": "firewall_api.php",
+			success: function(data) {
+            			alert(data)
+		},
+
+	        error: function() {
+        	    alert('Fail!');
+	        },
+			    columns: [
+                                { "data": 'model' },
+                                { "data": 'form' },
+                                { "data": 'users_fg' },
+                                { "data": 'ngfw' },
+                                { "data": 'ngfw' },
+                                { "data": 'ngfw' },
+                                { "data": 'ngfw' },
+                                { "data": 'ngfw' },
+                                { "data": 'ngfw' }
+                        ]
+		});
+
+
+	});
+</script>
+
+  </div><!--end #base-->
+        <!-- END BASE -->
+
+        <!-- BEGIN JAVASCRIPT -->
+        <!-- END JAVASCRIPT -->
+
+        </body>
+</html>
+
+
